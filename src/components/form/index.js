@@ -4,11 +4,10 @@ import { Form, Icon, Input, Button, DatePicker, Card, Row, Col, Empty, Typograph
 import Table from '../table';
 import { addUser} from "../../redux/actions";
 import {getAllUsers} from '../../redux/selectors'
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
  class Index extends Component {
    constructor(props) {
      super(props)
-   
      this.state = {
         data: []
      }
@@ -20,6 +19,8 @@ import { connect } from "react-redux";
    }
   handleSubmit = e => {
     e.preventDefault();
+    // const users = useSelector(state => state.users)
+    // console.log('use selector users', users)
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const formValues = {

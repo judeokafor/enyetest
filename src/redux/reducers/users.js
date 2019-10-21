@@ -3,17 +3,13 @@ import {ADD_USER} from '../actionTypes';
 const initialState = {
   users: []
 }
-export default function (state= initialState, action) {
-  switch (action.type) {
+export default function (state= initialState, { type, payload }) {
+  switch (type) {
     case ADD_USER:
-      const {content} = action.payload;
-      state.users.push(content)
-      return {
-        ...state,
-      }
+      state.users.push(payload)
+      return { ...state, ...payload }
     default:
       return state;
   }
-  
   
 }

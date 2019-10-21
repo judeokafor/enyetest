@@ -1,7 +1,6 @@
 import {ADD_USER} from './actionTypes';
-export const addUser = (content) => ({
+export const addUser = (payload) => ({
   type: ADD_USER,
-  payload: {
-    content
-  }
+  payload
 });
+
