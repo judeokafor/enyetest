@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import './index.css'
 import { Form, Icon, Input, Button, DatePicker, Card, Row, Col, Empty, Typography} from 'antd';
-import Table from '../table'
+import Table from '../table';
+import { addUser} from "../../redux/actions";
+import {getAllUsers} from '../../redux/selectors'
+import { connect } from "react-redux";
  class Index extends Component {
    constructor(props) {
      super(props)
@@ -10,7 +13,11 @@ import Table from '../table'
         data: []
      }
    }
-   
+   componentDidMount() {
+    this.setState({
+      data: this.props.allUsers
+    })
+   }
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -22,7 +29,10 @@ import Table from '../table'
           birthday: values['date-picker'].format('YYYY-MM-DD'),
           hobbies: values['hobbies'].trim().split(/[ ,]+/),
         }
-        this.state.data.push(formValues);
+        this.props.addUser(formValues);
+        this.setState({
+          data: this.props.allUsers
+        })
         this.props.form.resetFields();
       }
     });
@@ -82,7 +92,7 @@ import Table from '../table'
             <Input.TextArea rows={4}
               prefix={<Icon type="heart" theme="twoTone" twoToneColor="#eb2f96" />}
               type="text"
-              placeholder="Hobbies seperated by commas eg: Reading, singing"
+              placeholder="Hobbies separated by commas or space eg: Reading, singing"
             />,
           )}
         </Form.Item>
@@ -108,4 +118,8 @@ import Table from '../table'
   
 }
 const WrappedNormalLoginForm = Form.create({ name: 'normal_login' })(Index);
-export default WrappedNormalLoginForm;
+const mapStateToProps = state => {
+  const allUsers = getAllUsers(state);
+  return {allUsers};
+}
+export default connect(mapStateToProps, {addUser})(WrappedNormalLoginForm)
