@@ -1,0 +1,9 @@
+.root {
+	flex-grow: 1;
+}
+.title {
+	color: white;
+	flex-grow: 1;
+	text-align: center;
+	align-items: center;
+}
