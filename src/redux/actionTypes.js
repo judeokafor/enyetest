@@ -1,1 +1,5 @@
 export const ADD_USER = "ADD_USER"
+export const GET_USER = "GET_USER"
+export const USER_RECEIVED = "USER_RECEIVED"
+export const USER_ADDED = "USER_ADDED"
+export const USER_WATCHER = "USER_WATCHER"

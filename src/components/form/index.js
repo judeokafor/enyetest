@@ -6,7 +6,7 @@ import { addUser} from "../../redux/actions";
 import { useSelector, useDispatch } from "react-redux";
 
 const Index = ({form}) => {
-  const allUsers = useSelector(state => state.users.users);
+  const allUsers = useSelector(state => state.users);
   const dispatch = useDispatch();
   const handleSubmit = e => {
     e.preventDefault();
