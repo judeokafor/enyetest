@@ -5,17 +5,18 @@ export default class Index extends Component {
     super(props)
   
     this.state = {
-       data: this.props.data
+       data: this.props.data,
+       loading: this.props.loading
     }
   }
   
   render() {
     const columns = [
       {
-        title: 'S/N',
+        title: 'User Id',
         dataIndex: 'id',
         key: 'id',
-        render: (text, record, i) => <span>{i+1}</span>
+        render: (text) => <span>{text}</span>
       },
       {
         title: 'First Name',
@@ -66,7 +67,7 @@ export default class Index extends Component {
     ];
     return (
       <div>
-       <Table pagination= { {defaultPageSize: 5}} columns={columns} dataSource={this.state.data} />
+       <Table loading= {this.state.loading} pagination= { {defaultPageSize: 5}} columns={columns} dataSource={this.state.data} />
       </div>
     )
   }

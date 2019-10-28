@@ -1,7 +1,8 @@
-import { put, takeLatest, call} from 'redux-saga/effects';
+import { put, takeLatest, takeEvery, call} from 'redux-saga/effects';
 import { USER_URL } from "../constants";
-import {USER_RECEIVED, GET_USER, USER_ADDED, USER_WATCHER} from "../actionTypes"
-import {updateUsers} from '../actions'
+import {USER_RECEIVED, GET_USER, USER_ADDED, ADD_USER} from "../actionTypes"
+import {updateUsers, getUser} from '../actions';
+import {firebaseLooper} from '../../misc/helpers'
 
 function fetchUsersApi() {
   return fetch(USER_URL).then(response => response.json()); 
@@ -9,22 +10,32 @@ function fetchUsersApi() {
 function addUsersApi(data) {
   return fetch(USER_URL, {
     method: 'POST',
+    mode: 'cors',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(data)
-  })
+  }).then(response => response.json()); 
 }
 function* getUserEffectSaga({payload}) {
   try {
-    const users = yield call(fetchUsersApi, payload)
-    //dispatch action to change redux state i.e update users state
-    yield put(updateUsers(users))
+    console.log('i am called get usereffectsaga')
+    const users = yield call(fetchUsersApi, payload);
+    yield put(updateUsers(firebaseLooper(users)))
+  } catch (error) {
+    console.error(error)
+  }  
+}
+export function* postUserEffect({payload}) {
+  try {
+    console.log('calling post user effect')
+    yield call(addUsersApi, payload);
+    yield put(getUser());
   } catch (error) {
     console.error(error)
   }
-  
 }
 export function* actionWatcher() {
-  yield takeLatest(USER_RECEIVED, getUserEffectSaga)
+  yield takeLatest(GET_USER, getUserEffectSaga);
+  yield takeEvery(ADD_USER, postUserEffect)
 }
