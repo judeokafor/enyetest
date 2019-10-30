@@ -1,8 +1,10 @@
-import { put, takeLatest, takeEvery, call} from 'redux-saga/effects';
+import { put, takeLatest, takeEvery, call, take, fork} from 'redux-saga/effects';
 import { USER_URL } from "../constants";
-import {USER_RECEIVED, GET_USER, USER_ADDED, ADD_USER} from "../actionTypes"
+import { GET_USER, ADD_USER} from "../actionTypes"
 import {updateUsers, getUser} from '../actions';
 import {firebaseLooper} from '../../misc/helpers'
+import { firebaseUsers } from "../../firebase";
+import { eventChannel } from 'redux-saga';
 
 function fetchUsersApi() {
   return fetch(USER_URL).then(response => response.json()); 
@@ -19,23 +21,45 @@ function addUsersApi(data) {
 }
 function* getUserEffectSaga({payload}) {
   try {
-    console.log('i am called get usereffectsaga')
+    console.log('calling usereffectsaga')
     const users = yield call(fetchUsersApi, payload);
-    yield put(updateUsers(firebaseLooper(users)))
+    console.log('firebaselooper users',firebaseLooper(users));
+    yield put(updateUsers(firebaseLooper(users)));
   } catch (error) {
     console.error(error)
   }  
 }
 export function* postUserEffect({payload}) {
   try {
-    console.log('calling post user effect')
+    console.log('calling post user effect');
     yield call(addUsersApi, payload);
     yield put(getUser());
   } catch (error) {
     console.error(error)
   }
 }
+function* startListener() {
+  const channel = new eventChannel(emiter => {
+    console.log('new emmiter')
+    firebaseUsers.on("value", snapshot => {
+      console.log('snapshot', snapshot.val())
+      emiter({ data: snapshot.val() || {} });
+    });
+
+    return () => {
+      firebaseUsers.off();
+    };
+  });
+
+  while (true) {
+    const { data } = yield take(channel);
+    console.log('data from listener event', data)
+    yield put(updateUsers(firebaseLooper(data)))
+  }
+}
+
 export function* actionWatcher() {
+  yield fork(startListener);
   yield takeLatest(GET_USER, getUserEffectSaga);
   yield takeEvery(ADD_USER, postUserEffect)
 }

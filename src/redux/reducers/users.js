@@ -1,5 +1,4 @@
-import {ADD_USER, GET_USER, USER_RECEIVED, UPDATE_USER} from '../actionTypes';
-import { eventChannel } from 'redux-saga';
+import {ADD_USER, GET_USER, UPDATE_USER} from '../actionTypes';
 
 const initialState = {
   users: [],
@@ -12,8 +11,6 @@ export default function (state= initialState, { type, payload }) {
     case GET_USER:
       return { ...state, loading: true }
     case UPDATE_USER:
-      return { ...state, users: payload, loading: false }
-    case USER_RECEIVED:
       return { ...state, users: payload, loading: false }
     default:
       return state;

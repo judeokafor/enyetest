@@ -1,27 +1,24 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect} from 'react'
 import './index.css'
 import { Form, Icon, Input, Button, DatePicker, Card, Row, Col, Empty, Typography} from 'antd';
 import Table from '../table';
-import { addUser, getUser, updateUsers} from "../../redux/actions";
+import { addUser, getUser} from "../../redux/actions";
 import { useSelector, useDispatch } from "react-redux";
+import {firebaseUsers} from '../../firebase'
 
 const Index = ({form}) => {
   const dispatch = useDispatch();
   const allUsers = useSelector(state => state.users.users);
   const isLoading = useSelector (state => state.users.loading);
-  const [users, setUsers] = useState(useSelector(state => state.users.users));
-  const [tableLoading, setTableLoading] = useState(false)
-  console.log('all users from top', allUsers)
-  console.log('users from state', users)
-  console.log('tableLoading from state', tableLoading)
+  console.log('all users from top', allUsers);
   useEffect(() => {
+    //get all users initially from component did mount using react hooks
     dispatch(getUser());
+    // trying to get all users from firebase console, but connection not working
+    firebaseUsers.on('value', snapshot => console.log('user snapshot', snapshot.val()))
   }, []);
-
-  
-
   const handleSubmit = e => {
-    
+    e.preventDefault();
     form.validateFields((err, values) => {
       if (!err) {
         const formValues = {
@@ -32,9 +29,7 @@ const Index = ({form}) => {
           hobbies: values['hobbies'],
         }
         dispatch(addUser(formValues));
-        console.log(allUsers)
         form.resetFields();
-        e.preventDefault();
       }
     });
   };

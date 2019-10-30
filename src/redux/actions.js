@@ -1,4 +1,4 @@
-import {ADD_USER, UPDATE_USER, GET_USER, USER_RECEIVED} from './actionTypes';
+import {ADD_USER, UPDATE_USER, GET_USER} from './actionTypes';
 export const addUser = (payload) => ({
   type: ADD_USER,
   payload
@@ -11,8 +11,5 @@ export const updateUsers = (payload) => ({
 export const getUser = () => ({
   type: GET_USER
 })
-export const userReceived = (payload) => ({
-  type: USER_RECEIVED,
-  payload
-})
+
 
