@@ -25,7 +25,6 @@ export function* postUserEffect({payload}) {
 function* startListener() {
   const channel = new eventChannel((emitter) => {
     firebaseUser.on("value", snapshot => {
-      console.log('data from snapshot emmiter', snapshot.val())
       emitter({ data: snapshot.val() || {} });
     });
     return () => {
@@ -37,7 +36,6 @@ function* startListener() {
     const { data } = yield take(channel);
     const userdata = data !== null ? Object.keys(data).map((value, i) => data[value]) : [];
     const newUserData = userdata.map(element => element.hasOwnProperty('id') ? {id: element.id, ...element.user} : {...element.user})
-    console.log(newUserData, 'new data')
     yield put(updateUsers(newUserData));
   }
 }

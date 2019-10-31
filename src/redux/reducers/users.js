@@ -9,10 +9,8 @@ export default function (state= initialState, { type, payload }) {
     case ADD_USER:
       return { ...state, loading: true, ...payload }
     case UPDATE_USER:
-      console.log(payload, 'payload from update users')
       return {...state,  users: payload, loading: false }
     default:
       return state;
   }
-  
 }
