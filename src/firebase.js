@@ -4,7 +4,8 @@ import "firebase/database";
 import "firebase/auth";
 import "firebase/storage";
 
- const config = {
+// Initialize Firebase
+const config = {
   apiKey: "AIzaSyCdKQ1ylXIoPmI_o7X_qmMuEJDl8NiIoA8",
   authDomain: "fir-functions-enye.firebaseapp.com",
   databaseURL: "https://fir-functions-enye.firebaseio.com",
@@ -15,13 +16,15 @@ import "firebase/storage";
   measurementId: "G-VCCYTVTGW8"
 };
 
+firebase.initializeApp(config);
 
-const fire = firebase.initializeApp(config);
+const firebaseDB = firebase.database();
+const firebaseMatches = firebaseDB.ref("matches");
+const firebaseUser = firebaseDB.ref("user");
 
-const firebaseDB = fire.database();
-const firebaseUsers = firebaseDB.ref("user");
 export {
-  fire,
+  firebase,
+  firebaseMatches,
+  firebaseUser,
   firebaseDB,
-  firebaseUsers,
 };

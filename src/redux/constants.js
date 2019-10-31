@@ -1,1 +1,1 @@
-export const USER_URL = 'https://us-central1-fir-functions-enye.cloudfunctions.net/entries';
+export const USER_URL = 'https://us-central1-fir-functions-enye.cloudfunctions.net/user';

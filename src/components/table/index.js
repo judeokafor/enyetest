@@ -1,16 +1,10 @@
-import React, { Component } from 'react'
+import React from 'react'
+import { useSelector } from "react-redux";
 import { Table, Tag } from 'antd';
-export default class Index extends Component {
-  constructor(props) {
-    super(props)
-  
-    this.state = {
-       data: this.props.data,
-       loading: this.props.loading
-    }
-  }
-  
-  render() {
+
+  const Index = ({data}) => {
+    const {users} = useSelector(state => state.users)
+    console.log(data, 'log props from table data')
     const columns = [
       {
         title: 'User Id',
@@ -67,9 +61,10 @@ export default class Index extends Component {
     ];
     return (
       <div>
-       <Table loading= {this.state.loading} pagination= { {defaultPageSize: 5}} columns={columns} dataSource={this.state.data} />
+       <Table  pagination= { {defaultPageSize: 5}} columns={columns} dataSource={users.reverse()} />
       </div>
     )
-  }
+  
 }
+export default Index;
 

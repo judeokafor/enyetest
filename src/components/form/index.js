@@ -2,20 +2,14 @@ import React, {useEffect} from 'react'
 import './index.css'
 import { Form, Icon, Input, Button, DatePicker, Card, Row, Col, Empty, Typography} from 'antd';
 import Table from '../table';
-import { addUser, getUser} from "../../redux/actions";
+import { addUser} from "../../redux/actions";
 import { useSelector, useDispatch } from "react-redux";
-import {firebaseUsers} from '../../firebase'
 
 const Index = ({form}) => {
   const dispatch = useDispatch();
-  const allUsers = useSelector(state => state.users.users);
-  const isLoading = useSelector (state => state.users.loading);
-  console.log('all users from top', allUsers);
+  const {users} = useSelector(state => state.users)
   useEffect(() => {
-    //get all users initially from component did mount using react hooks
-    dispatch(getUser());
-    // trying to get all users from firebase console, but connection not working
-    firebaseUsers.on('value', snapshot => console.log('user snapshot', snapshot.val()))
+    console.log('form page loaded')
   }, []);
   const handleSubmit = e => {
     e.preventDefault();
@@ -100,7 +94,7 @@ const Index = ({form}) => {
       </div>
       </Col>
       <Col span={16}>
-      <div> {allUsers.length !== 0 ? (<Table loading= {isLoading} data = {allUsers} />) : (<Empty description={
+      <div> {users.length !== 0 ? (<Table data = {users} />) : (<Empty description={
       <span> <Typography.Text type='warning' > Please fill the form to see table values</Typography.Text></span>
       }/>) }</div>
       </Col>
